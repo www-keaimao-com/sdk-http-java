@@ -1,6 +1,7 @@
 package com.test.service;
 
 
+import com.test.comm.enums.MsgTypeEnum;
 import com.test.comm.enums.RequestTypeEnum;
 import com.test.comm.sdk.Api;
 import com.test.model.Msg;
@@ -16,8 +17,8 @@ public class DispatchService {
 
     public void disp(Msg msg) throws IOException {
         RequestTypeEnum requestTypeEnum = RequestTypeEnum.map.get(msg.getType());
-        String testStr = requestTypeEnum.getDesc();
-        System.out.println("收到msg，事件code: "+requestTypeEnum.getType()+" ("+requestTypeEnum.getDesc()+") msg: "+msg.getMsg());
+        String msgTypeDesc = msg.getMsgType()==0 ? "未知": MsgTypeEnum.map.get(msg.getMsgType()).getDesc();
+        System.out.println("收到msg，事件code: "+requestTypeEnum.getType()+" ("+requestTypeEnum.getDesc()+" - "+msgTypeDesc+") msg: "+msg.getMsg());
         switch (requestTypeEnum){
             case PRIVATE:
                 Api.send_text_msg(msg.getRobotWxid(), msg.getFromWxid(), "我已经收到你的消息:"+msg.getMsg());

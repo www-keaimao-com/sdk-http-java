@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+<context:property-placeholder location="classpath:config.properties" ignore-unresolvable="true" />
+
+<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping" />
+
+<!-- rocketmq配置 -->
+<bean id="messageListeners" class="com.test.mq.listener.MessageListenerImpl"></bean>
+
+<!-- 导入Spring配置文件 -->
+<bean id="rocketmqConsumer" class="org.apache.rocketmq.client.consumer.DefaultMQPushConsumer" init-method="start" destroy-method="shutdown">
+    <property name="consumerGroup" value="${rocketmq.consumerGroup}" />
+    <property name="namesrvAddr" value="${rocketmq.namesrvAddr}" />
+    <property name="messageListener" ref="messageListeners" />
+    <property name="subscription">
+        <map>
+            <entry key="${rocketmq.topic}" value="${rocketmq.tags}" />
+        </map>
+    </property>
+</bean>
+
+
+<bean id="rocketMQProducer" class="com.test.mq.producer.RocketMQProducer" init-method="init" destroy-method="destroy">
+    <property name="producerGroup" value="${rocketmq.producer.group}" />
+    <property name="namesrvAddr" value="${rocketmq.namesrvAddr}" />
+    <!-- 失败重试次数 <property name="retryTimes" value="${rocketmq.producer.retryTimes}" /> -->
+</bean>
+
+
+
+</beans>

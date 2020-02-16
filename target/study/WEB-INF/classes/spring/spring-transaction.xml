@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--  applicationContext-transaction.xml
+      平台事务管理器 (注入dataSouce)
+      配置通知增强 (挂在平台事务管理器)
+      配置aop(配置切点  配置增强和切点的组合)
+      -->
+
+    <!-- 配置包扫描,只扫描transaction层-->
+    <context:component-scan base-package="com.test.transaction"/>
+
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource"/>
+    </bean>
+
+    <!-- 配置事务的通知-->
+    <tx:advice id="txAdvice" transaction-manager="transactionManager">
+        <tx:attributes>
+            <!--匹配所有方法-->
+            <tx:method name="add*" isolation="REPEATABLE_READ" propagation="REQUIRED" read-only="false" timeout="-1"/>
+        </tx:attributes>
+    </tx:advice>
+
+    <!-- 启用 aspectj 方式 AOP-->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <!-- 2.开启aop，对类代理强制使用cglib代理 -->
+    <aop:config proxy-target-class="true"/>
+
+    <!--自己定义的测试通知接口-->
+    <bean id="logInterceptor2" class="com.test.transaction.LogInterceptor2"/>
+
+    <!--配置AOP-->
+    <aop:config>
+        <!-- 配置切入点表达式-->
+        <aop:pointcut id="pointcut" expression="execution(* com.test..*.*(..))"/>
+        <!--只有设置了通知，发生了异常才能让数据库事务发生作用-->
+        <!--为事务通知指定切入点表达式-->
+        <aop:advisor advice-ref="txAdvice" pointcut-ref="pointcut"/>
+        <!--这里支持继续通知其他的地方，目前是自己测试的接口-->
+        <aop:advisor advice-ref="logInterceptor2" pointcut-ref="pointcut"/>
+    </aop:config>
+
+
+</beans>

@@ -1,0 +1,11 @@
+com\test\model\User.class
+com\test\comm\utils\SpringUtils.class
+com\test\controller\TestMq.class
+com\test\initialize\SpringContext.class
+com\test\transaction\LogInterceptor.class
+com\test\service\user\UserService.class
+com\test\mq\producer\RocketMQProducer.class
+com\test\dao\UserDao.class
+com\test\controller\OrderController.class
+com\test\transaction\LogInterceptor2.class
+com\test\mq\listener\MessageListenerImpl.class

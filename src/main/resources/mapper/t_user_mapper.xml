@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.test.dao.UserDao">
+
+    <!-- 实体bean与数据字段对应关系 -->
+    <resultMap id="resultMapUser" type="com.test.model.User">
+        <result column="id"                jdbcType="INTEGER" property="id" />
+        <result column="nickname"          jdbcType="VARCHAR" property="nickname" />
+        <result column="sex"               jdbcType="INTEGER" property="sex" />
+        <result column="status"            jdbcType="INTEGER" property="status" />
+        <result column="created_time"      jdbcType="INTEGER" property="createdTime" />
+    </resultMap>
+
+    <sql id="TABLE">t_user</sql>
+
+    <sql id="Base_Column_List">
+        `nickname`, `sex`, `status`, `created_time`
+    </sql>
+
+    <insert id="insert" parameterType="com.test.model.User" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO <include refid="TABLE"/>
+        (`nickname`, `sex`, `status`, `created_time`)
+        VALUES (
+        #{nickname,jdbcType=VARCHAR},
+        #{sex,jdbcType=INTEGER},
+        #{status,jdbcType=INTEGER},
+        UNIX_TIMESTAMP(NOW()))
+    </insert>
+
+</mapper>

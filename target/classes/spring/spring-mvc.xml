@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:contxt="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache http://www.springframework.org/schema/cache/spring-cache.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+
+    <!--启用注解扫描-->
+    <contxt:component-scan base-package="com.test.controller" />
+
+    <!--mvc拦截器，放行静态资源-->
+    <mvc:resources location="/resources/**" mapping="/resources"/>
+
+    <!--将所有的静态资源交还 Servlet 处理-->
+    <mvc:default-servlet-handler />
+
+    <!--实现抛出异常后记录异常日志数据库操作后再回滚事物-->
+    <!--<bean id="logAspect" class="com.chip.annotation.SystemLogAspect" />-->
+
+    <!--启用 mvc 的常用注解-->
+    <mvc:annotation-driven>
+        <!--解决@ResponsBody返回乱码-->
+        <mvc:message-converters register-defaults="true">
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg value="UTF-8" />
+            </bean>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="org.springframework.http.converter.json.Jackson2ObjectMapperFactoryBean">
+                        <property name="failOnEmptyBeans" value="false"/>
+                    </bean>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <bean id="springContext" class="com.test.initialize.SpringContext"/>
+
+    <!--实现i18n国际化-->
+    <bean id="localeResolver" class="org.springframework.web.servlet.i18n.SessionLocaleResolver">
+        <property name="defaultLocale" value="zh" />
+    </bean>
+
+
+
+    <!-- 【可选】 -->
+    <!-- 默认情况下，使用的是 FixedThemeResolver 来确定主题名字，默认名字为 theme -->
+    <!-- 可以根据实际情况配置为 SessionThemeResovler/CookieThemeResolver -->
+    <bean id="themeResolver" class="org.springframework.web.servlet.theme.SessionThemeResolver">
+        <property name="defaultThemeName" value="default" /> <!-- 默认主题文件的名字，如果不设置，名为 theme -->
+    </bean>
+
+
+    <!--配置返回页面-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+        <property name="prefix" value="/WEB-INF/jsp/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!--配置上传下载-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver" />
+
+</beans>

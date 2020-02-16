@@ -4,25 +4,7 @@
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
 
-    <display-name>Archetype Created Web Application</display-name>
-
-    <!--RESTful过滤器，针对delete和put请求-->
-    <filter>
-        <filter-name>HiddenHttpMethodFilter</filter-name>
-        <filter-class>org.springframework.web.filter.HiddenHttpMethodFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>HiddenHttpMethodFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
-    <filter>
-        <filter-name>HttpPutFormContentFilter</filter-name>
-        <filter-class>org.springframework.web.filter.HttpPutFormContentFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>HttpPutFormContentFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
+    <display-name>sdk_http_java</display-name>
 
     <!--解决中文乱码-->
     <filter>
@@ -39,15 +21,13 @@
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-
-
-
     <!--配置 Spring 的容器-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath*:spring/spring-*.xml</param-value>
     </context-param>
 
+    <!-- spring监听器 -->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -57,27 +37,26 @@
         <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
     </listener>
 
-    <!--配置 MVC 容器-->
+
     <!--将所有的请求都交给 Spring MVC 处理-->
     <servlet>
-        <servlet-name>app</servlet-name>
+        <servlet-name>SpringMVC</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!--用来定义参数,可有多个init-param。在servlet类中通过getInitParamenter(String name)方法访问初始化参数    -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath:spring/spring-mvc.xml</param-value>
         </init-param>
-        <!-- 设置启动顺序 -->
+        <!--当值为正数或零时：Servlet容器先加载数值小的servlet，再依次加载其他数值大的servlet.-->
         <load-on-startup>1</load-on-startup>
-
-        <multipart-config>
-            <!--<location>d:/idea/image</location>-->
-            <max-file-size>-1</max-file-size>
-            <max-request-size>-1</max-request-size>
-        </multipart-config>
+        <async-supported>true</async-supported><!--设置是否启用异步支持-->
     </servlet>
-    <servlet-mapping>
-        <servlet-name>app</servlet-name>
-        <url-pattern>/</url-pattern>
+
+
+    <servlet-mapping>                           <!--用来定义servlet所对应的URL-->
+        <servlet-name>SpringMVC</servlet-name>    <!--指定servlet的名称-->
+        <!-- 此处也可以配置成 *.do 形式 -->
+        <url-pattern>/</url-pattern>              <!--指定servlet所对应的URL-->
     </servlet-mapping>
 
 

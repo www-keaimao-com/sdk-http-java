@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--<configuration debug="true">-->
+<configuration debug="false">
+
+    <!--定义日志文件的存储地址 勿在 LogBack 的配置中使用相对路径-->
+    <property name="LOG_HOME" value="${catalina.base}/logs"/>
+    <property name="APP_NAME" value="sdk_http_java"/>
+
+    <!--<statusListener class="ch.qos.logback.core.status.OnConsoleStatusListener"/>-->
+
+
+    <!-- appender与过滤器整合，一个appender可含一个或多个filter，有多个filter时，按照配置先后顺序执行 -->
+    <appender name="CONSOLE_ME" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- ThresholdFilter临界值过滤器，过滤掉低于指定临界值的日志-->
+        <!-- 当日志级别等于或高于临界值时，过滤器返回NEUTRAL；当日志级别低于临界值时，日志会被拒绝。 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+        <encoder>
+
+            <pattern>[%highlight(%-5level)]| %date{yyyy-MM-dd HH:mm:ss} | %boldGreen(%logger) | %method:%L - %msg%n"</pattern>
+            <!--<charset>UTF-8</charset>-->
+        </encoder>
+        <!-- prudent=true表示日志写入线程安全，会降低效率，默认为false -->
+        <prudent>false</prudent>
+    </appender>
+
+    <appender name="CONSOLE_SQL" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>[%highlight(%-5level)]| %date{yyyy-MM-dd HH:mm:ss} | %boldGreen(%logger) | %method:%L - %msg%n"</pattern>
+        </encoder>
+        <prudent>true</prudent>
+    </appender>
+
+
+    <!--    <logger name="com.nilo.dms.dao" level="INFO"/>-->
+
+    <!--子节点<root>:它也是<loger>元素，但是它是根loger,是所有<loger>的上级。只有一个level属性，因为name已经被命名为"root",且已经是最上级了。-->
+    <!--level: 用来设置打印级别，大小写无关：TRACE, DEBUG, INFO, WARN, ERROR, ALL和OFF，还有一个特俗值INHERITED或者同义词NULL，默认是DEBUG-->
+    <logger name="cc.iwens.www.dao" level="DEBUG" additivity="false">
+        <appender-ref ref="CONSOLE_SQL" />
+    </logger>
+    <!--<logger name="cc.iwens.www" level="INFO"/>-->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE_ME"/>
+        <!--<appender-ref ref="ROLLING-FILE"/>-->
+    </root>
+    <!-- 级别顺序 OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL -->
+
+
+</configuration>

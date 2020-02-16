@@ -10,10 +10,14 @@
   <version>1.0-SNAPSHOT</version>
   <packaging>war</packaging>
 
-  <name>study Maven Webapp</name>
-  <url>http://www.example.com</url>
+  <name>keiamao http sdk</name>
+  <url>http://www.keaimao.com</url>
 
   <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.encoding>UTF-8</maven.compiler.encoding>
+    <java-version>1.8</java-version>
     <spring.version>5.1.7.RELEASE</spring.version>
     <spring-security.version>[5.1.5,)</spring-security.version>
     <mybatis.version>3.5.1</mybatis.version>
@@ -118,19 +122,13 @@
       <artifactId>jedis</artifactId>
       <version>2.9.0</version>
     </dependency>
+
     <dependency>
       <groupId>javax.servlet</groupId>
       <artifactId>javax.servlet-api</artifactId>
       <version>4.0.1</version>
     </dependency>
 
-
-    <!-- 也会导致基本的提示都会输出 -->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-test</artifactId>
-      <version>${spring.version}</version>
-    </dependency>
 
     <!-- 添加mybatis依赖 -->
     <dependency>
@@ -167,10 +165,11 @@
       <scope>provided</scope>
     </dependency>
 
+
     <dependency>
-      <groupId>org.apache.rocketmq</groupId>
-      <artifactId>rocketmq-client</artifactId>
-      <version>4.2.0</version>
+      <groupId>com.squareup.okhttp3</groupId>
+      <artifactId>okhttp</artifactId>
+      <version>3.9.0</version>
     </dependency>
 
 
@@ -182,7 +181,7 @@
   </dependencies>
 
   <build>
-    <finalName>study</finalName>
+    <finalName>sdk_http_java</finalName>
     <plugins>
 
       <plugin>
@@ -213,16 +212,7 @@
         </dependencies>
       </plugin>
 
-      <!-- 配置Tomcat插件 -->
-<!--      <plugin>
-        <groupId>org.apache.tomcat.maven</groupId>
-        <artifactId>tomcat8-maven-plugin</artifactId>
-        <version>2.2</version>
-        <configuration>
-          <path>/</path>
-          <port>8080</port>
-        </configuration>
-      </plugin>-->
+
 
     </plugins>
   </build>

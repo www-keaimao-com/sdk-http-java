@@ -26,7 +26,7 @@
     <aspectj.version>1.8.9</aspectj.version>
     <fastjson.version>[1.2.58,)</fastjson.version>
     <commons-lang3.version>3.5</commons-lang3.version>
-    <jackson.version>2.9.9</jackson.version>
+    <jackson.version>2.9.10.7</jackson.version>
   </properties>
 
   <dependencies>
